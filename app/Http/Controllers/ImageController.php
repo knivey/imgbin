@@ -35,7 +35,7 @@ class ImageController extends Controller
         $this->authorize('destroy', $image);
 
         $image->delete();
-        return route("gallery");
+        return redirect(route("gallery"));
     }
 
     public function upload(Request $request) {
@@ -57,7 +57,7 @@ class ImageController extends Controller
         $img->save(storage_path("app/public/blur_$thumbpath"));
 
         if(!$path) {
-            return redirect('/error'); //TODO real error
+            abort(503);
         }
         $bytes = 3;
         $cnt = 0;
@@ -83,6 +83,6 @@ class ImageController extends Controller
         else
             $image->title = $request->file('file')->getClientOriginalName();
         $image->save();
-        return redirect('/'); //TODO redirect to image's page
+        return redirect(route("viewImage", $shortid));
     }
 }

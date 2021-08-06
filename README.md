@@ -14,6 +14,7 @@ Goal here is just get it ready to put on a server and use.
 - Admin users that can delete images or users
 - Hosting: figure out enable email stuff 
 - Captcha for registration page
+- NSFW images put overlay saying NSFW in gallery
 
 ### Phase 2 
 Add Features
