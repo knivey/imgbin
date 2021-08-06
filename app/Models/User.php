@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Image;
+
 
 class User extends Authenticatable
 {
@@ -58,4 +60,20 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function images() {
+        return $this->hasMany(Image::class);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function($user) {
+            //believe we must iterate the images so the delete event is triggered in image model
+            //otherwise it seems its just doing a db query for deletes
+            foreach ($user->images as $image) {
+                $image->delete();
+            }
+        });
+    }
 }

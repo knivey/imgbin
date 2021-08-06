@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\IndexController;
+use \App\Http\Controllers\ImageController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,10 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+Route::get("/", IndexController::class)->name("gallery");
+Route::get("/image/{image:shortid}", [ImageController::class, 'viewImage'])->name("viewImage");
+Route::get("/i/{image:shortid}", [ImageController::class, 'hotImage'])->name("hotImage");
+Route::get("/images/{user:name}", [ImageController::class, 'userImages'])->name("userImages");
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function(){
+    Route::get('/new', [ImageController::class, 'new'])->name('new');
+    Route::post('/upload', [ImageController::class, 'upload'])->name('upload');
+    Route::post('/delete-image/{image}', [ImageController::class, 'destroy'])->name('deleteImage');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+
